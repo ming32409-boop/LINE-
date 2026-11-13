@@ -1,0 +1,49 @@
+name: LINE 特輯活動檢查
+
+on:
+  workflow_dispatch: {} # 允許手動觸發測試
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 執行活動檢查腳本
+        env:
+          GEMINI_WEB_BASE_URL: ${{ secrets.GEMINI_WEB_BASE_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/check-line-campaigns.mjs
+
+      - name: 判斷活動資料是否變更
+        id: diff
+        run: |
+          if git diff --quiet worker/src/campaigns.json; then
+            echo "沒有變更"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "campaigns.json 已變更"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 建立活動審查 PR
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/new-line-campaigns
+          delete-branch: true
+          commit-message: "新增 LINE 特輯活動候選資料"
+          title: "新增 LINE 特輯活動，請審查活動規則"
+          body-path: .github/campaign-pr-body.md
+          add-paths: worker/src/campaigns.json
+          labels: |
+            campaigns
+            bot

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="上傳一張圖，AI 自動產出整組 LINE 貼圖（370×320 透明 PNG），下載 ZIP 後可直接到 LINE Creators Market 上架。" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="LINE 貼圖製造機｜LINE Sticker Studio" />
+<meta property="og:description" content="上傳一張角色圖 → AI 60 秒產 9 格同角色不同表情 → 自由組 8–40 張套組 → 下載 ZIP 直接上架到 LINE Creators Market。" />
+<meta property="og:image" content="https://ming32409-boop.github.io/LINE-/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://ming32409-boop.github.io/LINE-/" />
+<meta property="og:locale" content="zh_TW" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="LINE 貼圖製造機｜LINE Sticker Studio" />
+<meta name="twitter:description" content="上傳一張角色圖，AI 60 秒產 9 格貼圖，自由組 8–40 張套組上架 LINE Creators Market。" />
+<meta name="twitter:image" content="https://ming32409-boop.github.io/LINE-/og.png" />
+
+<link rel="canonical" href="https://ming32409-boop.github.io/LINE-/" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#06c755" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="shortcut icon" href="favicon.ico" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="LINE 貼圖製造機" />
+
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+    </symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+    </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 0 1 15.5-6.4L21 8"/><path d="M21 3v5h-5"/>
+      <path d="M21 12a9 9 0 0 1-15.5 6.4L3 16"/><path d="M3 21v-5h5"/>
+    </symbol>
+    <symbol id="i-zip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+      <path d="M14 3v6h6"/>
+      <path d="M10 12h2v2h-2zM10 16h2v2h-2z"/>
+    </symbol>
+    <symbol id="i-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="6" cy="6" r="3"/>
+      <circle cx="6" cy="18" r="3"/>
+      <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+      <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+      <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12l5 5 11-11"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6-5.4-2.9-5.4 2.9 1.1-6L3.2 9.4l6.1-.8z"/>
+    </symbol>
+    <symbol id="i-star-fill" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6-5.4-2.9-5.4 2.9 1.1-6L3.2 9.4l6.1-.8z"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6.5 7l1 12a1 1 0 0 0 1 .9h7a1 1 0 0 0 1-.9l1-12M10 11v6M14 11v6"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M12 5v14M5 12h14"/>
+    </symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+      <circle cx="12" cy="13" r="3.4"/>
+    </symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 5 3 10l5 5"/><path d="M3 10h11a6 6 0 0 1 0 12h-2"/>
+    </symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 5l5 5-5 5"/><path d="M21 10H10a6 6 0 0 0 0 12h2"/>
+    </symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 10h12a3 3 0 0 1 0 6h-2"/>
+      <path d="M4 10v6a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-6H4z"/>
+      <path d="M7 3c0 1.5-1 1.5-1 3M11 3c0 1.5-1 1.5-1 3M15 3c0 1.5-1 1.5-1 3"/>
+    </symbol>
+  </defs>
+</svg>
+<title>LINE 貼圖製造機｜LINE Sticker Studio</title>
+<style>
+/* 自架字型:Google Fonts CDN 跨域,SW 快取不到 → 離線一定壞。
+   400/500/700 只切這個站用到的字(靜態 UI);900 是貼圖 canvas 用的字重,
+   使用者會打任意文字,所以切到 BIG5 常用字 5,401。重切:pwa-skill/tools/selfhost-font.py */
+@font-face{font-family:"M PLUS Rounded 1c";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/m-plus-rounded-1c-500.woff2") format("woff2")}
+@font-face{font-family:"M PLUS Rounded 1c";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/m-plus-rounded-1c-700.woff2") format("woff2")}
+@font-face{font-family:"M PLUS Rounded 1c";font-style:normal;font-weight:900;font-display:swap;src:url("assets/fonts/m-plus-rounded-1c-900.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans TC";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/noto-sans-tc-400.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans TC";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/noto-sans-tc-500.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans TC";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/noto-sans-tc-700.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans TC";font-style:normal;font-weight:900;font-display:swap;src:url("assets/fonts/noto-sans-tc-900.woff2") format("woff2")}
+</style>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<!-- Language switcher removed: app is Taiwan-LINE-targeted; multi-region
+     would require region-specific campaigns/prices/URLs, not just i18n.
+     i18n framework + I18N dict kept in app.js for future use. -->
+
+<div id="auth-widget" class="auth-widget">
+  <div class="auth-info">
+    <div class="auth-quota" id="auth-quota">今日 AI 剩 — / —</div>
+  </div>
+</div>
+<header>
+  <h1>
+    <span class="brand-mark">LINE</span>
+    貼圖製造機
+  </h1>
+  <p class="tagline" data-i18n="brand_subtitle">上傳一張角色圖 → AI 產一整組貼圖 → 下載 ZIP 直接上架到 LINE Creators Market</p>
+
+  <!-- 上面那句「直接上架」是承諾,這行是它的憑據:作者本人用這套做的貼圖真的過審上架了。 -->
+  <p class="proof">
+    我用這套工具做的貼圖，已經有五組上架
+    <a data-config-link="storeUrl" hidden target="_blank" rel="noopener">LINE STORE 看成品 →</a>
+  </p>
+
+  <div class="howto">
+    <div class="howto-step">
+      <span class="howto-badge">①</span>
+      <div>
+        <strong>上傳一張角色圖</strong>
+        <span>自拍、Q 版頭像、手繪角色都可以</span>
+      </div>
+    </div>
+    <div class="howto-step">
+      <span class="howto-badge">②</span>
+      <div>
+        <strong>AI 一次產 9 格貼圖</strong>
+        <span>1 次 API 呼叫、約 50 秒，同角色 9 種不同姿勢/表情</span>
+      </div>
+    </div>
+    <div class="howto-step">
+      <span class="howto-badge">③</span>
+      <div>
+        <strong>去背 + 下載 ZIP</strong>
+        <span>瀏覽器內去背（資料不上傳），輸出 LINE 規格 PNG</span>
+      </div>
+    </div>
+  </div>
+  <p class="howto-byog-hint">
+    <strong>已經有 3×3 圖了?</strong> 不用上傳角色圖，直接拖到下面「替代路徑」上傳框，免費、免登入、一樣自動切 9 格 LINE 規格。
+  </p>
+</header>
+
+<main>
+  <div class="offline-banner" id="offline-banner" hidden>
+    離線模式：AI 生成／主題產生器／複製 prompt 需要網路，已暫停。
+    匯入圖片、切圖、去背、組包下載、歷史庫都照常可用。
+  </div>
+
+  <section class="rules-banner" id="rules-banner">
+    <h3>上傳前請確認 LINE Creators Market 規定</h3>
+    <p class="hint">違反這些規則 = LINE 審核時 100% 退件，做白工。</p>
+    <ul>
+      <li><strong>可以上傳</strong>：你自己的照片 / 你自製的原創角色 / 已取得使用授權的圖</li>
+      <li><strong>絕對不行</strong>：別人的照片（朋友/家人/前任/路人）、藝人 / KOL / 政治人物、動漫角色 (Pikachu / 鬼滅 / Hello Kitty / Disney 等)、品牌 logo、二次創作</li>
+      <li><strong>道德底線</strong>：色情、暴力、宗教、政治、誹謗、賭博相關內容</li>
+      <li>完整審核準則：<a href="https://creator.line.me/zh-hant/review_guideline/" target="_blank" rel="noopener">creator.line.me/zh-hant/review_guideline</a></li>
+    </ul>
+    <label class="rules-check">
+      <input type="checkbox" id="rules-ack" />
+      <span>我確認上傳的圖符合上述條件，<strong>違規後果由我自負</strong>。</span>
+    </label>
+  </section>
+
+
+  <nav class="studio-nav" id="studio-nav" aria-label="工作區切換">
+    <button type="button" class="studio-tab active" data-tab="create">企劃生圖</button>
+    <button type="button" class="studio-tab" data-tab="assets">素材庫</button>
+    <button type="button" class="studio-tab" data-tab="pack">組包出貨</button>
+  </nav>
+
+  <section class="card" id="step-upload" data-workspace="create">
+    <h2 data-i18n="step_a_title">主路徑 A：上傳角色圖讓 AI 產（每天 1 次免費，兌換碼可加值，免登入）</h2>
+    <p class="hint">建議：主體清楚、單純背景的正方形圖。AI 會學起來、一次產 9 格同角色不同姿勢/表情的貼圖（預設打包 8 張 = LINE 最小套組，格子可入池湊 16–40 張）。</p>
+    <p class="hint coffee-hint" data-config-section="donationUrl" hidden>
+      <svg class="inline-icon"><use href="#i-coffee"/></svg>
+      AI 圖像生成由本站支付服務費用，歡迎支持
+      <a data-config-link="donationUrl" hidden target="_blank" rel="noopener">請我喝杯咖啡</a>。
+    </p>
+
+    <label class="upload-box" id="drop-zone">
+      <input type="file" id="file-input" accept="image/*" hidden />
+      <svg class="upload-icon"><use href="#i-upload"/></svg>
+      <span data-i18n="drop_zone_text">點擊或拖曳圖片到這裡</span>
+    </label>
+    <div class="upload-or-row">
+      <span class="or-divider" data-i18n="upload_or">或</span>
+      <button type="button" class="ghost" id="open-camera-btn" data-i18n="open_camera_btn">
+        用相機現拍
+      </button>
+    </div>
+
+    <div id="source-preview" hidden>
+      <img id="source-img" alt="原圖預覽" />
+      <button class="ghost" id="clear-btn">
+        <svg class="btn-icon"><use href="#i-refresh"/></svg>
+        換一張
+      </button>
+    </div>
+  </section>
+
+  <section class="card" id="step-byog" data-workspace="create">
+    <h2>替代路徑 B：上傳你自己的 3×3 圖（省 API、可多選批次）</h2>
+    <p class="hint mini">已經自己用 Gemini / ChatGPT 跑出 3×3 圖了？直接傳這裡、零 API 成本。切好的格子會進「組包出貨」的貼圖池。</p>
+    <details>
+      <summary><strong>怎麼自己產？</strong></summary>
+      <ol>
+        <li>在下面「② 選樣式 + 短語」設定好你要的風格 / 活動</li>
+        <li>點「自訂 9 格 → 複製 prompt 到 Gemini」拿到完整 prompt</li>
+        <li>到 <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a> 或 ChatGPT，<strong>先上傳你的參考圖</strong>，再貼 prompt<br><span class="hint mini">注意：prompt 是「對這張圖做什麼」的指令，沒附圖就生不出你的角色</span></li>
+        <li>下載它出的 3×3 圖</li>
+        <li>回來這裡上傳（可一次選多張湊大套組）</li>
+      </ol>
+    </details>
+    <label class="upload-box compact" id="grid-drop-zone">
+      <input type="file" id="grid-file-input" accept="image/*" multiple hidden />
+      <svg class="upload-icon"><use href="#i-upload"/></svg>
+      <span data-i18n="grid_drop_zone_text">點擊或拖曳「3×3 圖」到這裡</span>
+    </label>
+  </section>
+
+  <section class="card" id="assets-panel" data-workspace="assets">
+    <h2>素材庫：grid 與歷史</h2>
+
+    <div class="assets-toolbar">
+      <div class="assets-filters" id="assets-filters">
+        <button type="button" class="assets-filter selected" data-filter="all">全部</button>
+        <button type="button" class="assets-filter" data-filter="ai">AI</button>
+        <button type="button" class="assets-filter" data-filter="byog">BYOG</button>
+        <button type="button" class="assets-filter" data-filter="starred">收藏</button>
+      </div>
+      <button type="button" class="ghost" id="assets-import-btn">匯入 3×3 圖（可多選）</button>
+      <button type="button" class="ghost" id="vault-export-btn" title="把素材庫+專案+Library 打包成一個 zip 帶走（換機/備份）">匯出整庫</button>
+      <label class="ghost file-btn" title="匯入之前匯出的整庫 zip（合併，不會清掉現有資料）">匯入整庫
+        <input type="file" id="vault-import-input" accept=".zip" hidden />
+      </label>
+      <select id="sticker-tag-filter" title="依 tag 篩選成品" hidden></select>
+      <span class="hint mini" id="storage-usage"></span>
+    </div>
+
+    <div id="sticker-lib-section" hidden>
+      <div class="history-header">
+        <h3>成品貼圖 <span id="sticker-lib-count" class="muted">(0)</span></h3>
+        <span class="hint mini">已編輯定稿的單張貼圖。點縮圖＝重新編輯（原參數）、點名稱＝改名、＋＝入池、勾選＝批次（入池／tag／刪除）。</span>
+      </div>
+      <div class="sticker-batch-bar" id="sticker-batch-bar" hidden>
+        <span class="hint mini" id="sticker-batch-count"></span>
+        <button type="button" class="ghost" id="sticker-batch-pool">勾選入池</button>
+        <button type="button" class="ghost" id="sticker-batch-tag">設定 tag</button>
+        <button type="button" class="ghost" id="sticker-batch-delete">刪除勾選</button>
+      </div>
+      <div class="sticker-lib-cards" id="sticker-lib-cards"></div>
+    </div>
+
+    <details class="tip-box" id="current-grid-box">
+      <summary><strong>目前載入的 grid（原始檔／下載備份）</strong></summary>
+    <!-- Current grid preview area (hidden until something loaded) -->
+    <div id="current-grid-area" hidden>
+      <div class="current-grid-meta">
+        <span id="current-grid-source-badge">AI</span>
+        <input type="text" id="current-grid-name" placeholder="(未命名 — 點此重命名)" maxlength="40" />
+        <span id="current-grid-time" class="muted"></span>
+      </div>
+      <div class="current-grid-stage">
+        <img id="current-grid-img" alt="當前 grid 預覽" />
+      </div>
+      <div class="current-grid-actions">
+        <button type="button" class="ghost" id="current-grid-star" title="收藏（不會被自動清除）">收藏</button>
+        <button type="button" class="ghost" id="current-grid-download" title="下載原始 grid PNG">下載</button>
+        <button type="button" class="ghost" id="current-grid-delete" title="從歷史刪除">刪除</button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="current-grid-empty" class="hint">
+      還沒載入任何 grid。到「企劃生圖」產一張，或上傳你做好的 3×3 圖。
+    </div>
+    </details>
+
+    <!-- History carousel -->
+    <div id="history-section" hidden>
+      <div class="history-header">
+        <h3>歷史 <span id="history-count" class="muted">(0)</span></h3>
+        <span class="hint mini">點縮圖挑一格直接編輯；點名稱改名。↻ 載入（取代貼圖池）、＋ 加入貼圖池、收藏、刪除。全部存在你的瀏覽器，數量不設限 — 用量看上方、備份用「匯出整庫」。</span>
+      </div>
+      <div class="history-cards" id="history-cards"></div>
+    </div>
+  </section>
+
+  <section class="card" id="step-config" data-workspace="create">
+    <h2 data-i18n="step_config_title">② 選樣式 + 短語（兩條路徑共用）</h2>
+
+    <p class="hint">一張 3×3 = <strong>9 格</strong>，1 次 AI 呼叫就完成（約 50 秒、~USD 0.04）。想出 16/24/32/40 張大套組：多產幾張 grid（或複製 prompt 自己跑），到「組包出貨」把格子入池自由挑。</p>
+
+    <div class="campaign-picker">
+      <div class="campaign-picker-head">
+        對準 LINE Creators Market 特輯活動（讓貼圖能投稿）
+        <button type="button" class="link-btn" id="campaign-toggle">展開</button>
+      </div>
+      <div class="campaign-list" id="campaign-list" hidden>
+        <p class="hint mini">挑一個活動，AI 會自動套用該活動所需的風格/規則；產 ZIP 會附上對應投稿說明。</p>
+        <!-- cards injected by JS -->
+      </div>
+      <div class="campaign-active" id="campaign-active" hidden></div>
+    </div>
+
+    <div class="field-row">
+      <label class="field">
+        畫風（46 種）
+        <select id="style-hint">
+          <option value="match" selected>跟原圖風格一致（推薦）</option>
+
+          <optgroup label="通用 chat sticker DNA">
+            <option value="classic_messenger_sticker">經典通訊軟體貼圖（粗黑線、軟陰影）</option>
+            <option value="pastel_kawaii">粉嫩卡哇伊（淡粉、簡化線）</option>
+            <option value="webcomic_lineart">輕量網路漫畫線稿（清爽腮紅、發光眼）</option>
+            <option value="loose_handdrawn_doodle">隨手手繪（個人 doodle 感）</option>
+            <option value="shitpost">廢文亂畫（PTT/Dcard 醜萌）</option>
+            <option value="retro_emoticon">復古 messenger emoji（黃臉圓嘴）</option>
+            <option value="jelly_blob">果凍布丁（透明圓潤）</option>
+            <option value="glitter_sparkle">Gen-Z 閃亮亮（彩虹、Holographic）</option>
+            <option value="black_marker">黑色麥克筆 zine 風</option>
+          </optgroup>
+
+          <optgroup label="梗圖 / 特殊">
+            <option value="meme_template">Impact 梗圖（白字黑邊）</option>
+            <option value="hand_drawn">napkin 塗鴉（5 秒草圖感）</option>
+          </optgroup>
+
+          <optgroup label="動漫 / 卡通">
+            <option value="cute_chibi">Q 版 chibi（大頭娃娃）</option>
+            <option value="bold_outline">粗線條卡通（LINE 經典感）</option>
+            <option value="manga">日本漫畫（網點、線稿）</option>
+            <option value="soft_anime">軟調手繪動畫（水彩背景、溫暖懷舊）</option>
+            <option value="hyperreal_anime">超寫實動漫（半寫實）</option>
+            <option value="cel_shading">賽璐璐動畫（硬邊陰影）</option>
+            <option value="flat_vector">扁平向量插圖</option>
+            <option value="doodle_line">極簡線條塗鴉</option>
+            <option value="crayon">蠟筆兒童畫</option>
+          </optgroup>
+
+          <optgroup label="3D / 立體">
+            <option value="polished_3d">精緻 3D 動畫（劇場級渲染）</option>
+            <option value="blind_box_3d">3D 盲盒公仔</option>
+            <option value="claymation">黏土動畫</option>
+            <option value="pixel_art">16-bit 像素藝術</option>
+          </optgroup>
+
+          <optgroup label="繪畫 / 插畫">
+            <option value="watercolor">水彩</option>
+            <option value="oil_painting">油畫（厚塗筆觸）</option>
+            <option value="gouache">不透明水彩 Gouache</option>
+            <option value="pencil_sketch">鉛筆素描</option>
+            <option value="colored_pencil">色鉛筆</option>
+            <option value="chinese_ink">水墨畫</option>
+            <option value="ukiyoe">浮世繪</option>
+            <option value="impressionism">印象派</option>
+            <option value="pop_art">Pop Art（普普藝術）</option>
+            <option value="art_nouveau">新藝術 Art Nouveau</option>
+            <option value="caricature">誇張漫畫 Caricature</option>
+            <option value="silhouette">剪影藝術</option>
+            <option value="film_noir">黑色電影 Film Noir</option>
+          </optgroup>
+
+          <optgroup label="攝影 / 寫實">
+            <option value="street_photography">街拍</option>
+            <option value="dslr_portrait">單眼人像散景</option>
+            <option value="film_35mm">35mm 底片</option>
+            <option value="polaroid">拍立得</option>
+            <option value="studio_portrait">棚拍人像</option>
+            <option value="fashion_editorial">時尚編輯雜誌風</option>
+            <option value="disposable_camera">即可拍 90s 復古</option>
+            <option value="film_90s">90 年代底片風</option>
+          </optgroup>
+
+          <optgroup label="潮 / 主題">
+            <option value="cyberpunk">賽博龐克</option>
+            <option value="vaporwave">蒸氣波 Vaporwave</option>
+            <option value="y2k">Y2K（鉻金屬、塑膠泡泡）</option>
+            <option value="steampunk">蒸氣龐克 Steampunk</option>
+          </optgroup>
+
+          <option value="__custom__">自訂…（中英文都可以）</option>
+        </select>
+      </label>
+      <label class="field" id="style-custom-wrap" hidden>
+        自訂風格（中英文都可以、英文通常較準）
+        <input type="text" id="style-custom-input" placeholder="例：90s anime + neon pastel + halftone dots / 浮世繪混 cyberpunk 螢光色 / 韓系 webtoon 加 glitter sparkle" maxlength="200" />
+        <button type="button" class="ghost" id="style-save-btn" title="收藏到「我的風格」，下次直接從下拉選">收藏這個風格</button>
+      </label>
+
+      <label class="field">
+        文字模式
+        <select id="with-text">
+          <option value="true" selected>印字（AI 把短語寫在貼圖上）</option>
+          <option value="false">無字模式（純表情/動作、不印任何字）</option>
+        </select>
+        <span class="field-hint">無字也是 LINE 上很受歡迎的設計：純粹靠表情和姿勢溝通，更通用、不限語言。</span>
+      </label>
+
+      <label class="field">
+        Chroma Key
+        <select id="chroma-key">
+          <option value="green" selected>綠幕 #00FF00</option>
+          <option value="magenta">洋紅幕 #FF00FF</option>
+          <option value="blue">藍幕 #0000FF</option>
+          <option value="cyan">青幕 #00FFFF</option>
+          <option value="yellow">黃幕 #FFFF00</option>
+          <option value="__custom__">自訂色…</option>
+        </select>
+        <span class="field-hint">挑一支角色身上沒有的顏色：綠色角色選洋紅幕、粉紅角色選綠幕、藍色角色選黃幕。生成和去背會使用同一個 key color。選「自訂色…」可以填 #RRGGBB；黑、白、灰沒有色度，chroma key 抓不到，會被擋下。</span>
+      </label>
+
+      <label class="field">
+        貼圖文字語言
+        <select id="text-lang">
+          <option value="zh-TW" selected>繁體中文</option>
+          <option value="zh-CN">简体中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+        </select>
+        <span class="field-hint">同時控制 AI 產 9 句的語言，以及 AI 把字寫上貼圖時用哪種文字。選「無字模式」時無作用。</span>
+      </label>
+    </div>
+
+    <div class="slot-status" id="slot-status">
+      <span class="slot-status-text" id="slot-status-text">目前：9 格短語全隨機（從內建 50 句抽）</span>
+      <button type="button" class="link-btn" id="open-settings-link">自訂 9 格</button>
+    </div>
+
+    <div class="estimate" id="estimate"></div>
+
+    <!-- Cloudflare Turnstile — invisible/managed mode. Renders a tiny
+         "verifying you're human" widget once on page load; token is
+         attached to /generate and /generate-themes requests. Sitekey is
+         hydrated from worker /config so the worker config is the single
+         source of truth. -->
+    <div id="cf-turnstile" class="cf-turnstile-host"></div>
+
+    <button class="primary" id="generate-btn">
+      <svg class="btn-icon"><use href="#i-sparkle"/></svg>
+      <span data-i18n="generate_btn">開始生成貼圖</span>
+    </button>
+
+    <div id="gen-progress" hidden>
+      <div class="bar"><div class="bar-fill" id="gen-bar-fill"></div></div>
+      <span id="gen-progress-text">準備中…</span>
+    </div>
+  </section>
+
+  <dialog id="settings-dialog">
+    <form method="dialog">
+      <h3>自訂 9 格短語 + 動作</h3>
+      <p class="hint">每格挑一個內建短語、自己打一句、或留「隨機」讓 AI 從 50 句裡抽。<br>
+        自訂格可填中文 / 英文 / 日文 / 梗圖台詞 / emoji，最多 30 字 — 風格選「梗圖」或「廢文」會更搭。<br>
+        每格右下「+ 動作」可加英文 pose 描述（例：<code>slumped at desk, weary look</code>），<strong>無字模式必填、不然角色會抽到無關的姿勢</strong>。<br>
+        按下「生成 9 句」會用上方主頁面選的「貼圖文字語言」產短語、並同時自動填好對應動作。</p>
+      <div class="theme-chips" id="theme-chips" aria-label="主題快速入口"></div>
+      <div class="theme-gen-row">
+        <input type="text" id="theme-input" placeholder="描述你要的主題，AI 幫你想 9 句 + 9 個動作…例：「我家貓」「上班崩潰」「失戀現場」" />
+        <button type="button" class="primary" id="theme-gen-btn">生成 9 句 + 動作</button>
+      </div>
+      <p class="hint" id="theme-gen-status" hidden></p>
+      <div class="slot-grid" id="slot-grid"></div>
+      <p class="hint" id="slots-copy-status" hidden></p>
+      <div class="phrase-set-row">
+        <select id="phrase-set-select" title="載入存過的短語組">
+          <option value="">載入短語組…</option>
+        </select>
+        <button type="button" class="ghost" id="phrase-set-save">存成短語組</button>
+      </div>
+      <menu>
+        <button value="cancel" class="ghost">取消</button>
+        <button type="button" class="ghost" id="slots-reset">全部重設</button>
+        <button type="button" class="ghost" id="slots-copy-prompt">
+          <svg class="btn-icon"><use href="#i-check"/></svg>
+          複製 prompt 到 Gemini
+        </button>
+        <button value="save" class="primary" id="slots-save">儲存</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="camera-dialog" class="camera-dialog">
+    <h3>用相機拍一張</h3>
+    <div class="camera-stage">
+      <video id="camera-video" autoplay playsinline muted></video>
+      <img id="camera-preview" alt="拍攝預覽" hidden />
+    </div>
+    <div id="camera-error" class="hint mini" hidden></div>
+    <menu>
+      <button type="button" class="ghost" id="camera-close-btn">取消</button>
+      <button type="button" class="ghost" id="camera-retake-btn" hidden>重拍</button>
+      <button type="button" class="primary" id="camera-shoot-btn">拍照</button>
+      <button type="button" class="primary" id="camera-use-btn" hidden>✓ 用這張</button>
+    </menu>
+    <canvas id="camera-canvas" hidden></canvas>
+  </dialog>
+
+  <dialog id="grid-pick-dialog" class="grid-pick-dialog">
+    <h3>挑一格直接編輯</h3>
+    <p class="hint mini">切好的 9 格 — 點一格進編輯器（去背＋文字＋定稿成成品），不會動到貼圖池。</p>
+    <div class="grid-pick-cells" id="grid-pick-cells"></div>
+    <menu><button type="button" class="ghost" id="grid-pick-close">取消</button></menu>
+  </dialog>
+
+  <dialog id="tile-dialog" class="tile-dialog">
+   <div class="tile-dialog-body">
+    <div class="editor-head">
+      <div class="editor-nav">
+        <button type="button" class="ghost" id="tile-prev" title="上一張（←）">←</button>
+        <h3 id="tile-dialog-title">貼圖編輯器</h3>
+        <button type="button" class="ghost" id="tile-next" title="下一張（→）">→</button>
+      </div>
+      <div class="editor-history">
+        <button type="button" class="ghost" id="tile-undo" title="復原（Ctrl+Z）" disabled><svg class="icon-14"><use href="#i-undo"/></svg></button>
+        <button type="button" class="ghost" id="tile-redo" title="重做（Ctrl+Y）" disabled><svg class="icon-14"><use href="#i-redo"/></svg></button>
+      </div>
+      <button type="button" class="ghost editor-include" id="tile-include-btn" title="這張是否打包進套組">✓ 已選入</button>
+      <button type="button" class="tile-dialog-x" id="tile-dialog-x" aria-label="關閉">✕</button>
+    </div>
+    <div class="tile-dialog-layout">
+
+      <div class="tile-dialog-left">
+        <div class="tile-dialog-stage">
+          <div class="tile-dialog-imgwrap">
+            <img id="tile-dialog-img" alt="貼圖放大預覽" draggable="false" />
+            <div id="tile-safe-guide" class="tile-safe-guide" title="LINE 10px 安全留白：貼圖內容(含文字)請留在框內"></div>
+          </div>
+        </div>
+        <p class="hint mini" id="tile-dialog-status"></p>
+        <p class="hint mini warn-line" id="text-margin-warn" hidden>注意：文字可能超出 LINE 的 10px 安全留白，上架有風險。</p>
+        <div class="tile-dialog-actions-row">
+          <button type="button" class="ghost" id="tile-set-main-btn" title="這張當 main.png（商店門面 240×240）">主圖</button>
+          <button type="button" class="ghost" id="tile-set-tab-btn" title="這張當聊天室標籤 tab.png（96×74）">標籤</button>
+          <button type="button" class="ghost" id="tile-reroll-btn" hidden title="用 AI 重抽這一格（耗 1 次呼叫）">重抽</button>
+        </div>
+        <menu class="tile-dialog-menu">
+          <button type="button" class="primary" id="tile-save-sticker-btn" title="把目前狀態（去背＋文字）定稿成一張成品貼圖，存進素材庫，之後任何套組都能直接挑用">存成成品</button>
+          <button type="button" class="ghost" id="tile-dialog-close">關閉</button>
+          <button type="button" class="ghost" id="tile-single-dl-btn">
+            <svg class="btn-icon"><use href="#i-download"/></svg>
+            下載 PNG
+          </button>
+          <button type="button" class="primary" id="tile-share-btn" hidden>分享這張</button>
+        </menu>
+      </div>
+
+      <div class="tile-dialog-right">
+        <section class="edit-sec">
+          <h4 class="edit-sec-title">去背</h4>
+    <div class="tile-dialog-controls">
+      <label class="bg-tune">Key
+        <select id="tile-key-select" aria-label="這張的 Chroma Key 顏色">
+          <option value="green">綠幕</option>
+          <option value="magenta">洋紅幕</option>
+          <option value="blue">藍幕</option>
+          <option value="cyan">青幕</option>
+          <option value="yellow">黃幕</option>
+          <option value="__custom__">自訂色…</option>
+        </select>
+      </label>
+      <label class="bg-tune">強度
+        <select id="tile-tune-select" aria-label="這張的去背強度">
+          <option value="safe">保守</option>
+          <option value="balanced" selected>標準（細節優先）</option>
+          <option value="aggressive">積極</option>
+          <option value="continuous">連續清理（背景優先）</option>
+        </select>
+      </label>
+      <button type="button" class="primary" id="tile-clean-btn">重新去背（只這張）</button>
+      <button type="button" class="ghost" id="tile-restore-btn">還原原始切圖</button>
+    </div>
+        <details class="tile-text-panel" id="tile-advanced">
+      <summary><strong>去背進階細調（蓋過上面的強度檔位，只影響這張）</strong></summary>
+      <p class="hint mini">拉桿即時重算（永遠從原始切圖）。往左 = 去更兇、往右 = 更保守。調到滿意就好，參數會存進專案。</p>
+      <div class="text-row">
+        <label class="text-mini">全去門檻
+          <input type="range" id="adv-hard" min="0.10" max="0.45" step="0.01" value="0.25" />
+        </label>
+        <label class="text-mini">羽化起點
+          <input type="range" id="adv-soft" min="0.02" max="0.20" step="0.01" value="0.05" />
+        </label>
+        <label class="text-mini">最低亮度
+          <input type="range" id="adv-minkey" min="20" max="90" step="1" value="50" />
+        </label>
+      </div>
+      <div class="text-row">
+        <label class="text-mini">色彩優勢比
+          <input type="range" id="adv-dominance" min="1.2" max="2.2" step="0.05" value="1.7" />
+        </label>
+        <label class="text-mini">邊緣侵蝕
+          <input type="range" id="adv-erode" min="0" max="3" step="1" value="0" />
+        </label>
+        <button type="button" class="ghost" id="tile-adv-reset">回檔位預設</button>
+      </div>
+    </details>
+          <p class="hint mini">單張重去背永遠從原始切圖重算，調幾次都不會疊加髒邊。棋盤格 = 透明區。</p>
+        </section>
+        <section class="edit-sec">
+        <details class="tile-text-panel" id="tile-text-panel" open>
+      <summary><strong>文字圖層（建議搭配無字生圖）</strong></summary>
+      <p class="hint mini">改字、換字型、搬位置都在你的瀏覽器完成 — 不重生圖、零 API 成本、任何語言。</p>
+      <textarea id="text-content" placeholder="這格要印的字（留空 = 不印字，Enter = 換行）" maxlength="60" rows="2"></textarea>
+      <div class="text-row">
+        <select id="text-font" aria-label="字型"></select>
+        <button type="button" class="ghost" id="text-local-fonts" hidden>列出本機字型</button>
+        <label class="ghost file-btn">上傳字型檔
+          <input type="file" id="text-font-file" accept=".ttf,.otf,.woff,.woff2" hidden />
+        </label>
+      </div>
+      <p class="hint mini" id="text-font-status" hidden></p>
+      <div class="text-row">
+        <label class="text-mini">大小
+          <input type="range" id="text-size" min="8" max="60" value="18" />
+        </label>
+        <label class="text-mini">旋轉
+          <input type="range" id="text-rotate" min="-90" max="90" step="1" value="0" title="斜斜的比較可愛；雙擊歸零" />
+        </label>
+        <label class="text-mini">描邊
+          <input type="range" id="text-stroke" min="0" max="30" value="18" />
+        </label>
+        <label class="text-mini">字色
+          <input type="color" id="text-color" value="#1f2d24" />
+        </label>
+        <label class="text-mini">邊色
+          <input type="color" id="text-stroke-color" value="#ffffff" />
+        </label>
+      </div>
+      <div class="text-anchors" id="text-anchors">
+        <button type="button" data-anchor="hor_tl">左上</button>
+        <button type="button" data-anchor="hor_top">正上</button>
+        <button type="button" data-anchor="hor_tr">右上</button>
+        <button type="button" data-anchor="hor_bl">左下</button>
+        <button type="button" data-anchor="hor_bottom">正下</button>
+        <button type="button" data-anchor="hor_br">右下</button>
+        <button type="button" data-anchor="ver_tl">直書左上</button>
+        <button type="button" data-anchor="ver_tr">直書右上</button>
+      </div>
+      <div class="text-row">
+        <label class="text-mini"><input type="checkbox" id="text-layer-below" /> 文字放角色下層</label>
+        <span class="hint mini">想放特別的位置？直接在上面的放大圖上<strong>拖曳文字</strong>。</span>
+      </div>
+      <p class="hint mini">字型授權提醒：上架／商用請確認你對所選字型有商用授權（本機字型不會上傳，只在你的電腦上合成）。</p>
+    </details>
+        </section>
+      </div>
+
+    </div>
+   </div>
+  </dialog>
+
+  <section class="card" id="library-panel" data-workspace="create">
+    <h2>我的 Library</h2>
+    <details id="prompt-history-box">
+      <summary><strong>Prompt 紀錄</strong>（複製過的 prompt 都在這，離線也能重複製）</summary>
+      <div id="prompt-history-list" class="prompt-history-list"></div>
+    </details>
+  </section>
+
+  <section class="card" id="project-panel" data-workspace="pack">
+    <div class="project-bar" id="project-bar">
+      <label class="project-bar-label">專案
+        <select id="project-select" title="切換專案（貼圖池會自動儲存成專案）"></select>
+      </label>
+      <input type="text" id="project-name" placeholder="專案名稱（自動儲存）" maxlength="40" />
+      <button type="button" class="ghost" id="project-new" title="開一個空的新專案">新增</button>
+      <button type="button" class="ghost" id="project-delete" title="刪除目前專案（不會刪素材庫的 grid）">刪除</button>
+    </div>
+  </section>
+
+  <div class="card pack-empty" id="pack-empty" data-workspace="pack">
+    <h2>組包出貨</h2>
+    <p class="hint">貼圖池還是空的。到「企劃生圖」產一張 3×3、上傳自己的圖，或從「素材庫」把既有 grid 加進來。</p>
+  </div>
+
+  <section class="card" id="step-preview" data-workspace="pack" hidden>
+    <h2 data-i18n="step_preview_title">貼圖池：挑選・去背・排序</h2>
+    <div class="pack-sources" id="pack-sources" hidden>
+      <span class="pack-sources-label">從既有 grid 加格子：</span>
+      <div class="pack-source-cards" id="pack-source-cards"></div>
+    </div>
+    <p class="hint">LINE 上架需要透明背景：「一鍵全部去背」在你的瀏覽器內處理整池（圖不上傳）。<strong>單張細修、加字、換 key 請點該格進編輯器</strong>；還原原圖也在編輯器裡。</p>
+
+    <div class="preview-actions">
+      <button class="primary" id="bg-remove-btn">
+        <svg class="btn-icon"><use href="#i-scissors"/></svg>
+        <span data-i18n="bg_remove_btn">一鍵全部去背（整池）</span>
+      </button>
+      <label class="bg-tune" for="bg-tune-select" title="保守：最不容易吃掉前景綠色；積極：綠背景去更乾淨">
+        去背強度
+        <select id="bg-tune-select" aria-label="去背強度">
+          <option value="safe">保守</option>
+          <option value="balanced" selected>標準（細節優先）</option>
+          <option value="aggressive">積極</option>
+          <option value="continuous">連續清理（背景優先）</option>
+        </select>
+      </label>
+      <label class="bg-tune" for="bg-key-select" title="選擇這批圖使用的 chroma key 背景色">
+        Key
+        <select id="bg-key-select" aria-label="Chroma Key 顏色">
+          <option value="green" selected>綠幕</option>
+          <option value="magenta">洋紅幕</option>
+          <option value="blue">藍幕</option>
+          <option value="cyan">青幕</option>
+          <option value="yellow">黃幕</option>
+          <option value="__custom__">自訂色…</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="bg-progress" hidden>
+      <div class="bar"><div class="bar-fill" id="bg-bar-fill"></div></div>
+      <span id="bg-progress-text">載入去背模型…</span>
+    </div>
+
+    <p class="hint">✓ 選入／✗ 排除；<strong>點圖＝編輯</strong>、<strong>按住拖＝排序</strong>（手機長按）。缺格子就從上方「＋」或素材庫加。</p>
+    <div class="pack-size-row">
+      <span class="pack-size-label">LINE 套組張數</span>
+      <div class="pack-size-chips" id="pack-size-chips"></div>
+      <div class="selection-status ready" id="selection-status">已選 8/8 張</div>
+    </div>
+    <div class="stickers-grid" id="stickers-grid"></div>
+  </section>
+
+  <section class="card" id="step-download" data-workspace="pack" hidden>
+    <h2 data-i18n="step_download_title">出貨：檢查 + 下載</h2>
+
+    <button class="primary big" id="download-zip-btn">
+      <svg class="btn-icon"><use href="#i-zip"/></svg>
+      <span data-i18n="download_zip_btn">下載 LINE 套組 ZIP（貼圖 + main + tab + 說明）</span>
+    </button>
+
+    <button class="ghost big" id="download-stickers-only-btn" title="貼圖池全部透明 PNG，沒有 LINE 規格的 main/tab/README — 拿去 Slack / Discord / Notion / 簡報、什麼都行">
+      <svg class="btn-icon"><use href="#i-download"/></svg>
+      <span>下載全部透明 PNG（不上架，拿去任何地方用）</span>
+    </button>
+    <p class="hint mini" style="margin-top:0.4rem">
+      不打算上架 LINE？這個按鈕一次給你 9 張獨立透明 PNG，貼到 Slack 表情、Discord emoji、Notion、PPT、Word、IG 限動，都行。檔名會帶上每張的短語，方便日後找。
+    </p>
+    <p class="hint mini" data-config-section="chatMakerUrl" hidden style="margin-top:0.4rem">
+      想先看貼在對話裡長什麼樣子？拿一張透明 PNG 丟進
+      <a data-config-link="chatMakerUrl" hidden target="_blank" rel="noopener">LINE 對話製造機</a>
+      ，預覽實際大小與對話背景上的效果；使用前請參閱該服務的隱私說明。
+    </p>
+
+    <p class="hint mini" data-config-section="replayUrl" hidden style="margin-top:0.4rem">
+      使用教學：<a data-config-link="replayUrl" hidden target="_blank" rel="noopener">觀看教學</a>。
+    </p>
+
+    <details class="tip-box">
+      <summary><strong>上架到 LINE Creators Market 完整步驟</strong></summary>
+      <div class="tip-body">
+        <p><strong>① 註冊 / 登入 Creators 帳號</strong></p>
+        <ol>
+          <li>到 <a href="https://creator.line.me/zh-hant/" target="_blank" rel="noopener">creator.line.me</a> 點右上「登入」用 LINE 帳號授權。</li>
+          <li>第一次會要填「創作者名稱」「Email」，同意條款。</li>
+        </ol>
+
+        <p><strong>② 建新貼圖</strong></p>
+        <ol>
+          <li>進「個人頁面 → 我的貼圖」，點 <strong>「新增 → Sticker（貼圖）」</strong>。</li>
+          <li>進入後分 3 個 tab 都要填：
+            <ul>
+              <li><strong>貼圖介紹</strong>（文字 metadata）— 見下面 ③</li>
+              <li><strong>貼圖管理 → 圖片編輯</strong>（檔案）— 見 ④</li>
+              <li><strong>販售資訊</strong>（價格 / 地區 / 活動 tag）— 見 ⑤</li>
+            </ul>
+          </li>
+        </ol>
+
+        <p><strong>③ 文字 metadata（手填）</strong></p>
+        <ul>
+          <li>貼圖標題：40 字內</li>
+          <li>貼圖簡介：160 字內</li>
+          <li>創作者名稱：50 字內</li>
+          <li>著作權標示（Copyright）：50 字內，<strong>限英數</strong>，例如 <code>© 2026 yourname</code></li>
+        </ul>
+
+        <p><strong>④ 上傳圖檔（兩種方法擇一）</strong></p>
+        <ul>
+          <li><strong>方法 A：整包 ZIP 拖入（推薦）</strong>
+            <br>「貼圖管理 → 圖片編輯」頁面有「<strong>上傳壓縮檔 (ZIP)</strong>」按鈕，
+            把這裡下載的 ZIP 整個拖進去，<code>main.png</code> / <code>tab.png</code> / <code>01.png</code>~<code>08.png</code>
+            會自動分配到對應欄位。我們輸出的檔名跟尺寸完全照 LINE 規格、ZIP 才幾十 KB（限制 60MB）。</li>
+          <li><strong>方法 B：一張一張上傳</strong>
+            <br>解壓後，把 <code>main.png</code> 拖到「主要圖片」欄、<code>tab.png</code> 拖到「聊天室標籤」欄、
+            <code>01.png</code>~<code>08.png</code> 依序拖到「貼圖 1」~「貼圖 8」欄。</li>
+        </ul>
+
+        <p><strong>⑤ 販售資訊</strong></p>
+        <ul>
+          <li><strong>是否使用 AI</strong>：本工具是 AI 生成，<strong>務必勾「使用 AI」</strong>。勾「未使用」＝申報不實會被退件，這欄也是參加「AI 相關獎項」的必要條件。<span class="warn">最多人漏這格。</span></li>
+          <li><strong>銷售區域</strong>：選「台灣」或「全球」（建議全球曝光大；部分特輯規定必須含台灣）</li>
+          <li><strong>主要使用語言</strong>：繁體中文</li>
+          <li><strong>價格</strong>：原創靜態貼圖 <strong>2026-07-01 起最低 NT$42</strong>（原本 30），級距為 42 / 60 / 72 / 78 / 90 / 120 / 150。動態貼圖、動態表情貼、原創主題的價格不變。（部分特輯有專屬定價，以該活動頁為準；級距可能再調整，送審當下以 Creators Market 下拉選單為準）</li>
+          <li><strong>特輯活動 tag</strong>（投稿活動才需要）：在「販售資訊」最下面有「特輯活動」勾選，
+            勾你要投稿的那個活動；沒有要投稿就留空。各特輯條件不同（例如至少 8 張與主題相關、排除訊息/隨你填貼圖），以活動頁為準。</li>
+        </ul>
+
+        <p><strong>⑥ 送審</strong></p>
+        <ul>
+          <li>三個 tab 都填好後，點「<strong>申請販售</strong>」。</li>
+          <li>審核時間很不一定。LINE 官方說一般 <strong>1-3 個工作天</strong>、最長約 10 天內，但作者實際等過<strong>一個半月</strong>。送出後就去忙別的，不要排上架檔期。</li>
+          <li>通過後狀態變「可發售」，再點「<strong>上架</strong>」就會出現在 LINE STORE 上。</li>
+          <li>每筆銷售你拿 <strong>50%</strong>（其他扣 LINE 平台費 + 三方支付手續費）。</li>
+        </ul>
+
+        <p class="warn"><strong>常見退件原因</strong>：
+          <br>• 肖像權：用他人照片但沒授權（→ 確認你就是圖中本人，或已書面授權）
+          <br>• 商標：包含 LINE 自家、品牌、藝人、卡通角色（→ 用自己原創角色）
+          <br>• 文字過多：整片都是字（→ 我們已限制每格只 1 句、視覺為主，通常不會中）
+          <br>• 解析度 / 透明背景不符（→ 本工具已輸出標準 370×320 透明 PNG，正常不會中）
+          <br>• 重複申請：同一組貼圖反覆送（→ 退件後改完再送）
+        </p>
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer>
+
+  <p>原始專案：<a href="https://github.com/yazelin/line-sticker-studio">yazelin / line-sticker-studio</a>（MIT） · <a data-config-link="repositoryUrl" href="https://github.com/ming32409-boop/LINE-">本站原始碼</a></p>
+  <p class="footer-note">去背、切圖、打包全在你的瀏覽器本地完成；AI 生成時參考圖僅用於產圖，本站轉發服務不另存圖片。
+    詳見<a href="privacy.html">隱私與資料使用說明</a>。</p>
+</footer>
+
+<script src="vendor/jszip.min.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+<script src="config.js"></script>
+<script type="module" src="app.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+name: Deploy GitHub Pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    if: ${{ vars.API_URL != '' && vars.SITE_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          API_URL: ${{ vars.API_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          STORE_URL: ${{ vars.STORE_URL }}
+          DONATION_URL: ${{ vars.DONATION_URL }}
+          CHAT_MAKER_URL: ${{ vars.CHAT_MAKER_URL }}
+          REPLAY_URL: ${{ vars.REPLAY_URL }}
+          CONTACT_URL: ${{ vars.CONTACT_URL }}
+          CREATOR_COPYRIGHT: ${{ vars.CREATOR_COPYRIGHT }}
+          CREATOR_ENGLISH: ${{ vars.CREATOR_ENGLISH }}
+          CREATOR_CHINESE: ${{ vars.CREATOR_CHINESE }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

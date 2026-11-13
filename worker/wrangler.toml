@@ -1,0 +1,19 @@
+# Manual template. Prefer npm run deploy at the repository root.
+name = "your-line-sticker-worker"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+# account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+[vars]
+TURNSTILE_SITE_KEY = "YOUR_PUBLIC_TURNSTILE_SITE_KEY"
+AI_DISABLED = "0"
+# DEFAULT_MODEL = "gemini-3.1-flash-image-preview"
+# Optional alternative to Vertex (never points to the original author):
+# GEMINI_WEB_BASE_URL = "https://your-gemini-service.example"
+
+[[kv_namespaces]]
+binding = "QUOTA" # Keep binding name: src/index.js reads env.QUOTA
+id = "YOUR_KV_NAMESPACE_ID"
+
+# Secrets: VERTEX_API_KEY (or GEMINI_API_KEY for optional self-hosted mode),
+# TURNSTILE_SECRET, ADMIN_TOKEN. Never put them in this file.

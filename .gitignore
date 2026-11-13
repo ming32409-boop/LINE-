@@ -1,0 +1,14 @@
+node_modules/
+test-results/
+playwright-report/
+
+# wrangler local dev state
+worker/.wrangler/
+
+.env
+.env.*
+!.env.example
+.dev.vars*
+dist/
+worker/wrangler.generated.json
+.worker-bundle/

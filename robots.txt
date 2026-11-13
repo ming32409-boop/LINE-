@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ming32409-boop.github.io/LINE-/sitemap.xml
