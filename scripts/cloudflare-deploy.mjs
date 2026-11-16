@@ -36,6 +36,9 @@ function wrangler(args, input) {
 }
 export async function deploy() {
   if (!env.CLOUDFLARE_API_TOKEN) throw new Error('Set repository Actions secret CLOUDFLARE_API_TOKEN.');
+  const token = await api('/user/tokens/verify');
+  if (token.status !== 'active') throw new Error('CLOUDFLARE_API_TOKEN is not active; replace it in repository Actions secrets.');
+  console.log('Cloudflare API token verified active.');
   if (!env.CLOUDFLARE_ACCOUNT_ID) {
     const accounts = await list('/accounts');
     if (accounts.length !== 1) throw new Error('Set repository variable CLOUDFLARE_ACCOUNT_ID to select one Cloudflare account.');
