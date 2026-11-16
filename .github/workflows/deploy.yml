@@ -11,6 +11,12 @@ concurrency:
   group: github-pages
   cancel-in-progress: false
 jobs:
+  configure-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -41,14 +47,11 @@ jobs:
           CREATOR_COPYRIGHT: ${{ vars.CREATOR_COPYRIGHT }}
           CREATOR_ENGLISH: ${{ vars.CREATOR_ENGLISH }}
           CREATOR_CHINESE: ${{ vars.CREATOR_CHINESE }}
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
   deploy:
-    needs: build
+    needs: [build, configure-pages]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
