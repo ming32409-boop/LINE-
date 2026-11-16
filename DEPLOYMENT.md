@@ -1,6 +1,14 @@
 # 從零開始部署清單
 
-目前狀態：程式碼已搬入此儲存庫，尚未連接你的 Cloudflare 或發布到 GitHub Pages。來源與 MIT 授權見 README、LICENSE。以下在自己的電腦或可安全輸入金鑰的環境操作；不要把金鑰貼進對話或 GitHub Issue。
+自動部署入口：Actions → **Deploy Studio (Cloudflare + Pages)**。推送 main 或手動 Run workflow 會建立／沿用 QUOTA KV、Managed Turnstile 與 Worker，檢查 API 後發布 Pages。
+
+必要的 repository Actions Secret 為 `CLOUDFLARE_API_TOKEN`，需有帳戶讀取、Workers Scripts Edit、Workers KV Storage Edit、Turnstile Edit 權限。若 Token 可見多個帳戶，另設 Actions Variable `CLOUDFLARE_ACCOUNT_ID`。預設 Worker 名稱 `line-sticker-studio`。
+
+Vertex Key 可稍後在 [Settings → Secrets and variables → Actions](https://github.com/ming32409-boop/LINE-/settings/secrets/actions) 新增 **Repository secret `VERTEX_API_KEY`**，然後重跑 workflow。沒有 Key 時先部署並停用 AI；不影響 BYOG。不要貼到對話、程式碼或 Variables。亦可在 Cloudflare Worker 的 Settings → Variables and Secrets 新增同名 Secret，再重跑 workflow；部署會保留既有 Secret。ADMIN_TOKEN 首次隨機產生且只存 Worker；需要管理功能時請在 Worker 設定安全地換成自己保管的值。
+
+Pages Source 應為 GitHub Actions。workflow 會嘗試啟用 Pages；若 GitHub 拒絕首次啟用，需於 Settings → Pages 手動選擇 GitHub Actions 後重跑。
+
+以下為本機部署替代流程。來源與 MIT 授權見 README、LICENSE。以下在自己的電腦或可安全輸入金鑰的環境操作；不要把金鑰貼進對話或 GitHub Issue。
 
 ## 1. 準備工具與儲存庫
 
