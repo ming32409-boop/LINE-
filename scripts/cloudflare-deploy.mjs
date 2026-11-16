@@ -16,6 +16,7 @@ async function api(path, method = 'GET', body) {
   if (!response.ok || !data.success) {
     const error = new Error(`Cloudflare ${method} ${path}: HTTP ${response.status}; codes ${(data.errors || []).map(e => e.code).join(',')}`);
     error.status = response.status;
+    error.codes = (data.errors || []).map(e => e.code);
     throw error;
   }
   return data.result;
@@ -65,7 +66,13 @@ export async function deploy() {
   if (!widget.secret) throw new Error('Turnstile secret unavailable; check Turnstile Edit permission.');
   env.TURNSTILE_SITE_KEY = widget.sitekey;
   console.log('Turnstile widget ready.');
-  let subdomain = await api(`${root}/workers/subdomain`);
+  let subdomain;
+  try {
+    subdomain = await api(`${root}/workers/subdomain`);
+  } catch (error) {
+    // New accounts report the missing workers.dev subdomain as 404 / 10007.
+    if (error.status !== 404 || !error.codes.includes(10007)) throw error;
+  }
   if (!subdomain?.subdomain) {
     subdomain = await api(`${root}/workers/subdomain`, 'PUT', { subdomain: `${env.GITHUB_REPOSITORY.split('/')[0]}-stickers` });
   }
