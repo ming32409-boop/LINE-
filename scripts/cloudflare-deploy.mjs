@@ -92,20 +92,25 @@ export async function deploy() {
   for (const value of Object.values(secrets)) mask(value);
   wrangler(['secret', 'bulk'], JSON.stringify(secrets));
   await api(`${root}/workers/scripts/${env.WORKER_NAME}/subdomain`, 'POST', { enabled: true });
+  console.log(`Checking public Worker endpoint: ${env.API_URL}`);
   let ready = false;
-  for (let attempt = 0; attempt < 12; attempt++) {
+  let healthError = 'Response did not match expected health, KV, or Turnstile configuration';
+  for (let attempt = 0; attempt < 36; attempt++) {
     try {
       const get = async path => {
         const response = await fetch(env.API_URL + path, { signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error('Health check failed');
+        if (!response.ok) throw new Error(`Health check ${path}: HTTP ${response.status}`);
         return response.json();
       };
       const [health, quota, publicConfig] = await Promise.all(['/', '/quota', '/config'].map(get));
       if (health.ok && quota.quota?.kvAvailable && publicConfig.turnstileSiteKey === widget.sitekey) { ready = true; break; }
-    } catch {}
+    } catch (error) {
+      healthError = error.cause?.code || error.message;
+    }
+    if (attempt % 6 === 0) console.log(`Waiting for Worker endpoint (${attempt + 1}/36): ${healthError}`);
     await new Promise(resolve => setTimeout(resolve, 5000));
   }
-  if (!ready) throw new Error('Worker deployed but health check failed; Pages was not published.');
+  if (!ready) throw new Error(`Worker deployed but health check failed (${healthError}); Pages was not published.`);
   build(env);
   if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `## Deployment\n- Worker: ${env.API_URL}\n- Pages target: ${env.SITE_URL}\n- KV and Turnstile: verified\n- AI: ${hasVertex ? 'configured (image generation not tested)' : 'disabled; add VERTEX_API_KEY in repository Actions secrets, then rerun'}\n`);
   console.log(`Worker verified: ${env.API_URL}; AI ${hasVertex ? 'configured' : 'disabled until VERTEX_API_KEY is provided'}.`);
